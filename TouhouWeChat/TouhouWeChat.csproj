@@ -6,10 +6,25 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UseWPF>true</UseWPF>
+        <ApplicationIcon>icon.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="ModernWpfUI" Version="1.0.0-rc.1" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Avatar\" />
+      <Folder Include="Charater\" />
+      <Folder Include="Data\" />
+      <None Update="Avatar\**\*">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Resource Include="icon.ico" />
     </ItemGroup>
 
 </Project>

@@ -7,10 +7,10 @@
         ui:WindowHelper.UseModernWindowStyle="True"
         xmlns:local="clr-namespace:TouhouWeChat"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="TouhouWeChat" Height="600" Width="1000">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="280"/>
+            <ColumnDefinition Width="230"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
@@ -28,18 +28,111 @@
                             
                         </StackPanel>
                     </Border>
-                    <ListBox Grid.Row="1">
-                        
+                    <ListBox Grid.Row="1" x:Name="CharacterList" SelectionChanged="Selected_Click">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="4,6">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- 头像 -->
+                                    <Border Grid.Column="0"
+                                            Width="44" Height="44"
+                                            CornerRadius="8"
+                                            Background="#33000000"
+                                            Margin="0,0,10,0">
+                                        <Image Source="{Binding AvatarImage}"
+                                               Stretch="UniformToFill"/>
+                                    </Border>
+
+                                    <!-- 名字 + 消息预览 -->
+                                    <StackPanel Grid.Column="1"
+                                                VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Displayname}"
+                                                   FontSize="14"
+                                                   FontWeight="SemiBold"
+                                                   TextTrimming="CharacterEllipsis"/>
+                                        <!-- ~1~ <TextBlock Text="{Binding persondescription}" @1@ -->
+                                        <!--            FontSize="11" -->
+                                        <!--            Foreground="#888888" -->
+                                        <!--            TextTrimming="CharacterEllipsis" -->
+                                        <!--            Margin="0,3,0,0"/> -->
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
                     </ListBox>
                     
                 </Grid>
             </Border>
-
             <!-- 右：聊天区 -->
             <Border Grid.Column="1">
-                <TextBlock Text="聊天区（待填）"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"/>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0"  BorderThickness="0,0,1,0"
+                            BorderBrush="#22000000">
+                        <TextBlock x:Name="DisplayNameText" Text="" FontSize="18"/>
+                    </Border>
+                    <Border Grid.Row="1">
+                        <ScrollViewer
+                                      x:Name="ChatScroll"
+                                      VerticalScrollBarVisibility="Auto">
+                            <ItemsControl x:Name="MessageList" Margin="16,12">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border x:Name="Bubble"
+                                                Margin="0,4"
+                                                Padding="12,8"
+                                                CornerRadius="10"
+                                                Background="#2A2A2A"
+                                                HorizontalAlignment="Left"
+                                                MaxWidth="480">
+                                            <TextBlock Text="{Binding Content}"
+                                                       TextWrapping="Wrap"
+                                                       Foreground="White"/>
+                                        </Border>
+
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding Role}" Value="user">
+                                                <Setter TargetName="Bubble" Property="HorizontalAlignment" Value="Right"/>
+                                                <Setter TargetName="Bubble" Property="Background" Value="#0066CC"/>
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Border>
+                    <Grid Grid.Row="2" Margin="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox x:Name="InputBox"
+                                 Grid.Column="0"
+                                 MinHeight="50"
+                                 Padding="10,6"
+                                 VerticalContentAlignment="Center"
+                                 AcceptsReturn="False"/>
+
+                        <Button x:Name="SendButton"
+                                Grid.Column="1"
+                                Content="Enter"
+                                MinWidth="80"
+                                MinHeight="50"
+                                Margin="6,0,0,0"
+                                Click="SendButton_ClickAndAIreply"/>
+                    </Grid>
+                   
+                    
+                </Grid>
             </Border>
         
     </Grid>
