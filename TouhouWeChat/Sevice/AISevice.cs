@@ -27,12 +27,12 @@ namespace TouhouWeChat
         /// <summary>
         /// 发一条消息给 AI，带上角色人设和历史记录，返回 AI 回复。
         /// </summary>
-        public async Task<ChatResult> ChatAsync(string persona, int affection, IEnumerable<ChatMessage> history)
+        public async Task<ChatResult> ChatAsync(string persona, int affection, IEnumerable<ChatMessage> history,UserProfile user)
         {
             try
             {
                 var messages = new List<object>();
-                messages.Add(new { role = "system", content = BuildSystemPrompt(persona, affection) });
+                messages.Add(new { role = "system", content = BuildSystemPrompt(persona, affection,user) });
 
                 foreach (var msg in history)
                 {
@@ -82,7 +82,7 @@ namespace TouhouWeChat
         /// <summary>
         /// 拼 system 提示词：角色人设 + 好感度描述。
         /// </summary>
-        private string BuildSystemPrompt(string persona, int affection)
+        private string BuildSystemPrompt(string persona, int affection,UserProfile user)
         {
             string affectionDesc = affection switch
             {
@@ -94,13 +94,17 @@ namespace TouhouWeChat
 
             return $"{persona}\n\n" +
                    $"当前你与对方的好感度为 {affection}。{affectionDesc}\n\n" +
+                   $"【对方信息】\n" +
+                   $"对方自称\"{user.Name}\"。\n" +
+                   $"{user.Description}\n\n" +
                    "【行为准则】\n" +
                    "1. 始终以第一人称、以角色的身份和口吻说话，绝不跳出角色。\n" +
                    "2. 回复要口语化、自然，像日常闲聊。默认 1~2 句话。\n" +
                    "3. 绝对不要自称 AI、助手、语言模型。\n" +
                    "4. 可以自然地提到幻想乡的日常、符卡、妖怪、宴会等话题。\n" +
-                   "5. 更具性格和好感度来回答，好感度>60时谈及恋爱结婚可接受，<60则会推脱和转移话题\n"+
-                   "6. 每次回复的最后，必须单独一行输出你对用户这次发言的好感度变化，\n" +
+                   "5. 根据性格和好感度来回答，好感度 > 60 时谈及恋爱结婚可接受，< 60 则会推脱和转移话题。\n" +
+                   "6. ()里面的内容是旁白或者人物动作，心理描写。\n"+
+                   "7. 每次回复的最后，必须单独一行输出你对用户这次发言的好感度变化，\n" +
                    "   格式为 [affection:+N] 或 [affection:-N] 或 [affection:0]。\n" +
                    "   +1~+3 表示用户的话让你开心、温暖、有好感；\n" +
                    "   -1~-3 表示用户的话让你不舒服、生气、讨厌；\n" +

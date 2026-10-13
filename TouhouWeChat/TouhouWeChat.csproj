@@ -7,6 +7,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <UseWPF>true</UseWPF>
         <ApplicationIcon>icon.ico</ApplicationIcon>
+        <SatelliteResourceLanguages>zh-CN</SatelliteResourceLanguages>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,8 +18,13 @@
     <ItemGroup>
       <Folder Include="Avatar\" />
       <Folder Include="Charater\" />
-      <Folder Include="Data\" />
       <None Update="Avatar\**\*">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </None>
+  <None Update="Data\**\*">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </None>
+  <None Update="Data\APIKEY\Apikey.txt">
     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </None>
     </ItemGroup>

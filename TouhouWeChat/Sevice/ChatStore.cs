@@ -45,4 +45,29 @@ public class ChatStore
 
         return result;
     }
+
+    public UserProfile? LoadUserConfig()
+    {
+        string dir = Path.Combine(DataFolder, "UserConfig");
+        Directory.CreateDirectory(dir);
+        string file = Path.Combine(dir, "user.json");
+
+        if (!File.Exists(file))
+        {
+            var defaultUser = new UserProfile();
+            File.WriteAllText(file, JsonConvert.SerializeObject(defaultUser));
+            return defaultUser;
+        }
+
+        string json = File.ReadAllText(file);
+        return JsonConvert.DeserializeObject<UserProfile>(json);
+    }
+
+    public void SaveUserConig(UserProfile user)
+    {
+        Directory.CreateDirectory(DataFolder);
+        string file = Path.Combine(DataFolder, "UserConfig","user.json");
+        File.WriteAllText(file, JsonConvert.SerializeObject(user));
+    }
+
 }
